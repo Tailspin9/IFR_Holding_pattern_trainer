@@ -148,34 +148,33 @@ while running:
     vertex3 = (cx + s / 2, cy + half_height)
 
     # Define the holding pattern parameters
-    straight_path_length = 200  # The length of the straight path in the holding pattern
+    straight_path_length = 140  # The length of the straight path in the holding pattern
+    additional_length = 60  # The additional length you want to add to the straight paths
     arc_radius = straight_path_length // 2  # The radius of each arc is half the length of the straight path
 
-    # Calculate the center points for the arcs
-    left_arc_center = (cx - straight_path_length, cy)
-    right_arc_center = (cx + straight_path_length, cy)
+    # Calculate the vertical offset
+    vertical_offset = (straight_path_length + additional_length) // 2 + 40
 
-
-
-    # Update the top and bottom arc center
-    bottom_arc_center = (cx, cy + arc_radius)
-    top_arc_center = (cx, cy - arc_radius)
+    # Adjust the centers of the arcs
+    left_arc_center = (cx, cy + vertical_offset)
+    right_arc_center = (left_arc_center[0] + 2 * arc_radius, cy + vertical_offset)
+    bottom_arc_center = (cx + arc_radius, cy + arc_radius + vertical_offset)
+    top_arc_center = (cx + arc_radius, cy - arc_radius - additional_length + vertical_offset)
 
     # Calculate the start and end points for the straight paths
-    left_straight_start = (cx - arc_radius, bottom_arc_center[1])
-    left_straight_end = (cx - arc_radius, top_arc_center[1])
+    left_straight_start = (left_arc_center[0], bottom_arc_center[1])
+    left_straight_end = (left_arc_center[0], top_arc_center[1])
 
-    right_straight_start = (cx + arc_radius, bottom_arc_center[1])
-    right_straight_end = (cx + arc_radius, top_arc_center[1])
+    right_straight_start = (right_arc_center[0], bottom_arc_center[1])
+    right_straight_end = (right_arc_center[0], top_arc_center[1])
 
     # Draw the arcs and the straight paths
-    #pygame.draw.arc(screen, BLACK,(left_arc_center[0] - arc_radius, left_arc_center[1] - arc_radius, 2 * arc_radius, 2 * arc_radius),0, math.pi, 2)
     pygame.draw.arc(screen, BLACK, (
-    bottom_arc_center[0] - arc_radius, bottom_arc_center[1] - arc_radius, 2 * arc_radius, 2 * arc_radius), math.pi,
+        bottom_arc_center[0] - arc_radius, bottom_arc_center[1] - arc_radius, 2 * arc_radius, 2 * arc_radius), math.pi,
                     2 * math.pi, 2)
     pygame.draw.arc(screen, BLACK,
                     (top_arc_center[0] - arc_radius, top_arc_center[1] - arc_radius, 2 * arc_radius, 2 * arc_radius), 0,
-                    math.pi, 2)  # Correctly flipped the top arc
+                    math.pi, 2)
     pygame.draw.line(screen, BLACK, left_straight_start, left_straight_end, 2)
     pygame.draw.line(screen, BLACK, right_straight_start, right_straight_end, 2)
 
